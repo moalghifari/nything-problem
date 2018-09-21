@@ -5,142 +5,104 @@ import constants
 class State:
 
     # Initialization
-    def __init__(self, papanCatur=constants.EMPTY_PAPAN_CATUR, listOfBidak=[], inputBidak=[]):
-        self.papanCatur = papanCatur
-        self.listOfBidak = listOfBidak
-        if inputBidak:
-            self.generateRandomPapan(inputBidak)
-        self.heuristikSamaWarna = self.hitungHeuristikSamaWarna
-        self.heuristikBedaWarna = self.hitungHeuristikBedaWarna
-        self.heuristikTotal = self.hitungHeuristikTotal
+    def __init__(self, chessBoard=constants.EMPTY_CHESS_BOARD, listOfPawn=[], pawnInput=[]):
+        self.chessBoard = chessBoard
+        self.listOfPawn = listOfPawn
+        if pawnInput:
+            self.generateRandomChessBoard(pawnInput)
+        self.sameColorHeuristic = self.calcSameColorHeuristic
+        self.diffColorHeuristic = self.calcDiffColorHeuristic
+        self.totalHeuristic = self.calcTotalHeuristic
 
-    # Generate Random Bidak Pada Papan Sesuai dengan Input
-    def generateRandomPapan(self, inputBidak):
-        for bidak in inputBidak:
-            # nanti variabel bidak ini bentuknya dictionary gitu {'jenisBidak': 'xxx', 'jumlahBidak}: 10}
-            # gunanya ** itu biar key pada variabel bidak disebar menjadi parameter fungsi generateRandomBidak
-            self.generateRandomBidak(**bidak)
+    # Generate Random Pawn Pada Papan Sesuai dengan Input
+    def generateRandomChessBoard(self, pawnInput):
+        for pawn in pawnInput:
+            # nanti variabel pawn ini bentuknya dictionary gitu {'pawnType': 'xxx', 'pawnCount}: 10}
+            # gunanya ** itu biar key pada variabel pawn disebar menjadi parameter fungsi generateRandomPawn
+            self.generateRandomPawn(**pawn)
 
-    def generateRandomBidak(self, jenisBidak, jumlahBidak):
-        for i in range(jumlahBidak):
+    def generateRandomPawn(self, pawnType, pawnCount):
+        for i in range(pawnCount):
             while True:
                 x = randint(0, 7)
                 y = randint(0, 7)
-                if (self.getElmtPapanCatur(x, y) == '.'):
+                if (self.getElmtChessBoard(x, y) == '.'):
                     break
 
-            self.listOfBidak.append({
-                'jenisBidak': jenisBidak, 
+            self.listOfPawn.append({
+                'pawnType': pawnType, 
                 'x': x,
                 'y': y
             })
-            self.papanCatur[y][x] = jenisBidak
+            self.chessBoard[y][x] = pawnType
 
-    # Menghitung heuristik
-    def hitungHeuristikSamaWarna(self):
+    # Menghitung heuristic
+    def calcSameColorHeuristic(self):
         # Sekar's code
         return 999999
-    def hitungHeuristikBedaWarna(self):
+    def calcDiffColorHeuristic(self):
         # Sekar's code
         return 999999
-    def hitungHeuristikTotal(self):
+    def calcTotalHeuristic(self):
         # Sekar's code
         return 999999
 
     # Print papan
-    def printPapanCatur(self):
-        for baris in self.papanCatur:
+    def printChessBoard(self):
+        for baris in self.chessBoard:
             print(' '.join(baris))
 
     # Getter dan Setter
-    def getPapanCatur(self):
-        return self.papanCatur
-    def getListOfBidak(self):
-        return self.listOfBidak
-    def getElmtPapanCatur(self, kol, bar):
-        return self.papanCatur[bar][kol]
-    def getElmtListOfBidak(self, idx):
-        return self.listOfBidak[idx]
-    def getHeuristikSamaWarna(self):
-        return self.heuristikSamaWarna
-    def getHeuristikBedaWarna(self):
-        return self.heuristikBedaWarna
-    def getHeuristikTotal(self):
-        return self.heuristikTotal
-    def setPapanCatur(self, papanCatur):
-        self.papanCatur = papanCatur
-    def setListOfBidak(self, listOfBidak):
-        self.listOfBidak = listOfBidak
-    def setElmtPapanCatur(self, kol, bar, bidak):
-        self.papanCatur[bar][kol] = bidak
-    def setElmtListOfBidak(self, idx, bidak):
-        self.listOfBidak[idx] = bidak
-    def setHeuristikSamaWarna(self, heuristikSamaWarna):
-        self.heuristikSamaWarna = heuristikSamaWarna
-    def setHeuristikBedaWarna(self, heuristikBedaWarna):
-        self.heuristikBedaWarna = heuristikBedaWarna
-    def setHeuristikTotal(self, heuristikTotal):
-        self.heuristikTotal = heuristikTotal
+    def getChessBoard(self):
+        return self.chessBoard
+    def getListOfPawn(self):
+        return self.listOfPawn
+    def getElmtChessBoard(self, kol, bar):
+        return self.chessBoard[bar][kol]
+    def getElmtListOfPawn(self, idx):
+        return self.listOfPawn[idx]
+    def getSameColorHeuristic(self):
+        return self.sameColorHeuristic
+    def getDiffColorHeuristic(self):
+        return self.diffColorHeuristic
+    def getTotalHeuristic(self):
+        return self.totalHeuristic
+    def setChessBoard(self, chessBoard):
+        self.chessBoard = chessBoard
+    def setListOfPawn(self, listOfPawn):
+        self.listOfPawn = listOfPawn
+    def setElmtChessBoard(self, kol, bar, pawn):
+        self.chessBoard[bar][kol] = pawn
+    def setElmtListOfPawn(self, idx, pawn):
+        self.listOfPawn[idx] = pawn
+    def setSameColorHeuristic(self, sameColorHeuristic):
+        self.sameColorHeuristic = sameColorHeuristic
+    def setDiffColorHeuristic(self, diffColorHeuristic):
+        self.diffColorHeuristic = diffColorHeuristic
+    def setTotalHeuristic(self, totalHeuristic):
+        self.totalHeuristic = totalHeuristic
     
 # Test Main Program
 def main():
-    # papanCatur = [
-    #     ['.','.','K','.','.','.','.','.'],
-    #     ['.','.','.','G','.','.','.','.'],
-    #     ['.','.','.','.','.','.','.','.'],
-    #     ['.','.','.','.','.','.','K','.'],
-    #     ['.','.','.','.','.','.','.','.'],
-    #     ['.','Q','.','.','.','.','.','.'],
-    #     ['.','.','.','.','.','Q','.','.'],
-    #     ['.','.','.','.','.','.','.','.']
-    # ]
-    # listOfBidak = [
-    #     {
-    #         'jenisBidak' : 'K',
-    #         'x' : '2',
-    #         'y' : '0',
-    #     },
-    #     {
-    #         'jenisBidak' : 'Q',
-    #         'x' : '1',
-    #         'y' : '5',
-    #     },
-    #     {
-    #         'jenisBidak' : 'G',
-    #         'x' : '3',
-    #         'y' : '1',
-    #     },
-    #     {
-    #         'jenisBidak' : 'K',
-    #         'x' : '6',
-    #         'y' : '3',
-    #     },
-    #     {
-    #         'jenisBidak' : 'Q',
-    #         'x' : '5',
-    #         'y' : '6',
-    #     },
-    #     ]
-    # state = State(papanCatur, listOfBidak)
-    # print(state.getElmtListOfBidak(0))
-    inputBidak = [
+    #TES
+    pawnInput = [
         {
-            'jenisBidak': 'K',
-            'jumlahBidak': 2
+            'pawnType': 'K',
+            'pawnCount': 2
         }, {
-            'jenisBidak':'B',
-            'jumlahBidak': 2
+            'pawnType':'B',
+            'pawnCount': 2
         }, {
-            'jenisBidak':'R',
-            'jumlahBidak': 2
+            'pawnType':'R',
+            'pawnCount': 2
         }, {
-            'jenisBidak':'Q',
-            'jumlahBidak': 2
+            'pawnType':'Q',
+            'pawnCount': 2
         }
     ]
-    state = State(inputBidak=inputBidak)
-    state.printPapanCatur()
-    for i in state.getListOfBidak():
+    state = State(pawnInput=pawnInput)
+    state.printChessBoard()
+    for i in state.getListOfPawn():
         print(i)
 
 if __name__ == '__main__':

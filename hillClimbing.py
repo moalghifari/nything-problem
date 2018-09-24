@@ -1,5 +1,12 @@
+import copy
+
 def generateStateCandidates(currentState):
     listOfStateCandidates = []
+    for pawn in currentState.getListOfPawn():
+        for possibleMove in pawn.getListOfPossibleMove():
+            newState = copy.deepcopy(currentState)
+            editedPawn = newState.searchPawn(pawn)
+            listOfStateCandidates.append(newState)
     return listOfStateCandidates
 
 def getMinimalHeuristicState(listOfStateCandidates):

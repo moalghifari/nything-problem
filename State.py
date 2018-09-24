@@ -1,18 +1,24 @@
 from random import randint
-
+from copy import deepcopy
 import constants
 
 class State:
 
     # Initialization
     def __init__(self, chessBoard=constants.EMPTY_CHESS_BOARD, listOfPawn=[], pawnInput=[]):
-        self.chessBoard = chessBoard
-        self.listOfPawn = listOfPawn
+        self.chessBoard = deepcopy(chessBoard)
+        self.listOfPawn = deepcopy(listOfPawn)
         if pawnInput:
             self.generateRandomChessBoard(pawnInput)
+        if (listOfPawn and (chessBoard == constants.EMPTY_CHESS_BOARD)):
+            self.generateChessBoardByListOfPawn()
         self.sameColorHeuristic = self.calcSameColorHeuristic
         self.diffColorHeuristic = self.calcDiffColorHeuristic
         self.totalHeuristic = self.calcTotalHeuristic
+
+    def generateChessBoardByListOfPawn(self):
+        for pawn in self.listOfPawn:
+            self.chessBoard[pawn.y][pawn.x] = pawn.type
 
     # Generate Random Pawn Pada Papan Sesuai dengan Input
     def generateRandomChessBoard(self, pawnInput):
@@ -53,8 +59,8 @@ class State:
             print(' '.join(baris))
 
     def move(self, pawn, possibleMove):
-        self.chessBoard[pawn.x][pawn.y] = '.'
-        self.chessBoard[possibleMove.x][possibleMove.y] = pawn.type
+        self.chessBoard[pawn.y][pawn.x] = '.'
+        self.chessBoard[possibleMove.y][possibleMove.x] = pawn.type
         pawn.move(possibleMove)
 
     

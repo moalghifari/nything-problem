@@ -1,4 +1,5 @@
 from random import randint
+from copy import deepcopy
 
 import constants
 
@@ -6,8 +7,8 @@ class State:
 
     # Initialization
     def __init__(self, chessBoard=constants.EMPTY_CHESS_BOARD, listOfPawn=[], pawnInput=[]):
-        self.chessBoard = chessBoard
-        self.listOfPawn = listOfPawn
+        self.chessBoard = deepcopy(chessBoard)
+        self.listOfPawn = deepcopy(listOfPawn)
         if pawnInput:
             self.generateRandomChessBoard(pawnInput)
         self.sameColorHeuristic = self.calcSameColorHeuristic

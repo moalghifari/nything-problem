@@ -39,13 +39,29 @@ def main() :
     while(not(int(str)==1 or int(str)==2 or int(str)==3)):
         print(">> Masukan Salah !")
         str = input(">> Pilihan : ")
-
     if (int(str) == 1) :
+<<<<<<< Updated upstream
         solveHill(pawnInput)
+=======
+        print ("Solusi HC")
+        state =
+        heuristic =
+>>>>>>> Stashed changes
     elif (int(str) == 2) :
         print ("Solusi SA")
+        print(" *•.¸*•.¸¤ Pilih jenis temperatur yang diinginkan ¤¸.•*¸.•* "),
+        print(">> 1. Constant")
+        print(">> 2. Linear")
+        print(">> 3. Logaritmic\n")
+        inputT = input(">> Pilihan : ")
+        
+        state =
+        heuristic =
     else :
         print ("Solusi GA")
-
+        state =
+        heuristic =
+    state.printChessBoard()
+    print(heuristic,' ','0')
 if __name__ == '__main__' :
     main()

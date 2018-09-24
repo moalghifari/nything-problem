@@ -86,6 +86,10 @@ def main():
     state.printChessBoard()
     for i in state.listOfPawn:
         print(i)
-
+        state.chessBoard[i['x']][i['y']] = '.'
+        state.chessBoard[2][i['y']] = i['pawnType']
+    state.printChessBoard()
+    for i in state.getListOfPawn():
+        print(i)
 if __name__ == '__main__':
     main()

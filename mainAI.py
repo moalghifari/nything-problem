@@ -1,3 +1,5 @@
+from hillClimbing import solveHill
+
 def main() :
     print("\n▀ ▄ ░ ▀ ▄ ░     █▀▀▄ ░ ░ █░░█ ▀▀█▀▀ █░░█ ░▀░ █▀▀▄ █▀▀▀     ░ ▄ ▀ ░ ▄ ▀")
     print("░ ░ █ ░ ░ █     █░░█ ▀ ▀ █▄▄█ ░░█░░ █▀▀█ ▀█▀ █░░█ █░▀█     █ ░ ░ █ ░ ░")
@@ -39,7 +41,7 @@ def main() :
         str = input(">> Pilihan : ")
 
     if (int(str) == 1) :
-        print ("Solusi HC")
+        solveHill(pawnInput)
     elif (int(str) == 2) :
         print ("Solusi SA")
     else :

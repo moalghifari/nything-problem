@@ -27,23 +27,7 @@ def solve(currentState):
     else:
         solve(minimalHeuristicState)
 
-def mainHill():
-    pawnInput = [
-    {
-        'pawnType': 'K',
-        'pawnCount': 2
-    }, {
-        'pawnType':'B',
-        'pawnCount': 2
-    }, {
-        'pawnType':'R',
-        'pawnCount': 2
-    }, {
-        'pawnType':'Q',
-        'pawnCount': 2
-    }
-    ]
+def solveHill(pawnInput):
     initState = State(pawnInput=pawnInput)
     finalState = solve(initState)
     finalState.printChessBoard()
-    return finalState

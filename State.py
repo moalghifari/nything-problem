@@ -1,18 +1,24 @@
 from random import randint
-
+from copy import deepcopy
 import constants
 
 class State:
 
     # Initialization
     def __init__(self, chessBoard=constants.EMPTY_CHESS_BOARD, listOfPawn=[], pawnInput=[]):
-        self.chessBoard = chessBoard
-        self.listOfPawn = listOfPawn
+        self.chessBoard = deepcopy(chessBoard)
+        self.listOfPawn = deepcopy(listOfPawn)
         if pawnInput:
             self.generateRandomChessBoard(pawnInput)
+        if (listOfPawn and (chessBoard == constants.EMPTY_CHESS_BOARD)):
+            self.generateChessBoardByListOfPawn()
         self.sameColorHeuristic = self.calcSameColorHeuristic
         self.diffColorHeuristic = self.calcDiffColorHeuristic
         self.totalHeuristic = self.calcTotalHeuristic
+
+    def generateChessBoardByListOfPawn(self):
+        for pawn in self.listOfPawn:
+            self.chessBoard[pawn.y][pawn.x] = pawn.type
 
     # Generate Random Pawn Pada Papan Sesuai dengan Input
     def generateRandomChessBoard(self, pawnInput):
@@ -26,7 +32,7 @@ class State:
             while True:
                 x = randint(0, 7)
                 y = randint(0, 7)
-                if (self.getElmtChessBoard(x, y) == '.'):
+                if (self.chessBoard[x][y] == '.'):
                     break
 
             self.listOfPawn.append({
@@ -52,35 +58,11 @@ class State:
         for baris in self.chessBoard:
             print(' '.join(baris))
 
-    # Getter dan Setter
-    def getChessBoard(self):
-        return self.chessBoard
-    def getListOfPawn(self):
-        return self.listOfPawn
-    def getElmtChessBoard(self, kol, bar):
-        return self.chessBoard[bar][kol]
-    def getElmtListOfPawn(self, idx):
-        return self.listOfPawn[idx]
-    def getSameColorHeuristic(self):
-        return self.sameColorHeuristic
-    def getDiffColorHeuristic(self):
-        return self.diffColorHeuristic
-    def getTotalHeuristic(self):
-        return self.totalHeuristic
-    def setChessBoard(self, chessBoard):
-        self.chessBoard = chessBoard
-    def setListOfPawn(self, listOfPawn):
-        self.listOfPawn = listOfPawn
-    def setElmtChessBoard(self, kol, bar, pawn):
-        self.chessBoard[bar][kol] = pawn
-    def setElmtListOfPawn(self, idx, pawn):
-        self.listOfPawn[idx] = pawn
-    def setSameColorHeuristic(self, sameColorHeuristic):
-        self.sameColorHeuristic = sameColorHeuristic
-    def setDiffColorHeuristic(self, diffColorHeuristic):
-        self.diffColorHeuristic = diffColorHeuristic
-    def setTotalHeuristic(self, totalHeuristic):
-        self.totalHeuristic = totalHeuristic
+    def move(self, pawn, possibleMove):
+        self.chessBoard[pawn.y][pawn.x] = '.'
+        self.chessBoard[possibleMove.y][possibleMove.x] = pawn.type
+        pawn.move(possibleMove)
+
     
 # Test Main Program
 def main():
@@ -102,8 +84,12 @@ def main():
     ]
     state = State(pawnInput=pawnInput)
     state.printChessBoard()
+    for i in state.listOfPawn:
+        print(i)
+        state.chessBoard[i['x']][i['y']] = '.'
+        state.chessBoard[2][i['y']] = i['pawnType']
+    state.printChessBoard()
     for i in state.getListOfPawn():
         print(i)
-
 if __name__ == '__main__':
     main()

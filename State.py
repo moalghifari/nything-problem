@@ -1,5 +1,6 @@
 from random import randint
 from copy import deepcopy
+from Pawn import Pawn
 import constants
 
 class State:
@@ -35,23 +36,9 @@ class State:
                 if (self.chessBoard[x][y] == '.'):
                     break
 
-            self.listOfPawn.append({
-                'pawnType': pawnType, 
-                'x': x,
-                'y': y
-            })
+            newPawn = Pawn(pawnType, x, y)
+            self.listOfPawn.append(newPawn)
             self.chessBoard[y][x] = pawnType
-
-    # Menghitung heuristic
-    def calcSameColorHeuristic(self):
-        # Sekar's code
-        return 999999
-    def calcDiffColorHeuristic(self):
-        # Sekar's code
-        return 999999
-    def calcTotalHeuristic(self):
-        # Sekar's code
-        return 999999
 
     # Print papan
     def printChessBoard(self):
@@ -63,7 +50,7 @@ class State:
         self.chessBoard[possibleMove.y][possibleMove.x] = pawn.type
         pawn.move(possibleMove)
 
-    
+
 # Test Main Program
 def main():
     #TES
@@ -84,12 +71,16 @@ def main():
     ]
     state = State(pawnInput=pawnInput)
     state.printChessBoard()
+    # print(state.listOfPawn)
+
     for i in state.listOfPawn:
-        print(i)
-        state.chessBoard[i['x']][i['y']] = '.'
-        state.chessBoard[2][i['y']] = i['pawnType']
-    state.printChessBoard()
-    for i in state.getListOfPawn():
-        print(i)
+        print(i.type, i.x, i.y)
+
+    pawn1 = state.listOfPawn[0]
+    print("List of possible moves pawn ", pawn1.type, pawn1.x, pawn1.y)
+    pawn1.generatePossibleMoves(state.chessBoard)
+    print(pawn1.listOfPossibleMove)
+    print("same color heuristic = ", pawn1.calcSameColorHeuristic(state.chessBoard))
+
 if __name__ == '__main__':
     main()

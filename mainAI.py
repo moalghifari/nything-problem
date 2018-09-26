@@ -1,4 +1,6 @@
-from hillClimbing import solveHill
+import SimulatedAnnealing
+import State
+import hillClimbing
 
 def main() :
     print("\n▀ ▄ ░ ▀ ▄ ░     █▀▀▄ ░ ░ █░░█ ▀▀█▀▀ █░░█ ░▀░ █▀▀▄ █▀▀▀     ░ ▄ ▀ ░ ▄ ▀")
@@ -40,8 +42,9 @@ def main() :
         print(">> Masukan Salah !")
         str = input(">> Pilihan : ")
     if (int(str) == 1) :
-        finalState = solveHill(pawnInput)
         print ("Solusi HC")
+        #state =
+        #heuristic =
     elif (int(str) == 2) :
         print ("Solusi SA")
         print(" *•.¸*•.¸¤ Pilih jenis temperatur yang diinginkan ¤¸.•*¸.•* "),
@@ -49,9 +52,17 @@ def main() :
         print(">> 2. Linear")
         print(">> 3. Logaritmic\n")
         inputT = input(">> Pilihan : ")
+        print(" *•.¸*•.¸¤ Masukan Nilai Pengurangan Temperatur ¤¸.•*¸.•* "),
+        value = input(">> ")
+        initState = State.State(pawnInput=pawnInput)
+        print(initState.listOfPawn)
+        finalState = SimulatedAnnealing.Solve(initState, inputT, value)
+        heuristic = finalState.totalHeuristic
     else :
         print ("Solusi GA")
-    finalState.printChessBoard()
-    print(finalState.calcSameColorHeuristic(), finalState.calcDiffColorHeuristic())
+        #state =
+        #heuristic =
+    
+
 if __name__ == '__main__' :
     main()

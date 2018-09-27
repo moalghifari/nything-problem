@@ -68,6 +68,10 @@ class State:
     def calcTotalHeuristic(self):
         return (self.calcSameColorHeuristic())
 
+    def searchPawn(self, pawnX):
+        for pawn in self.listOfPawn:
+            if (pawn.isEqual(pawnX)):
+                return pawn
 
 # Test Main Program
 def main():

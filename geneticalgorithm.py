@@ -79,3 +79,30 @@ def mutate(listOfPawn):
     return State(listOfPawn=listOfPawn)
   else:
     return State(listOfPawn=listOfPawn)
+
+
+def mainBet():
+  inputPawn = [
+    {
+      'pawnType': 'K',
+      'pawnCount': 2
+    }, 
+    {
+      'pawnType': 'B',
+      'pawnCount': 2
+    }, 
+    {
+      'pawnType': 'R',
+      'pawnCount': 2
+    }, 
+    {
+      'pawnType': 'Q',
+      'pawnCount': 2
+    }
+  ]
+
+  res = main(inputPawn)
+
+  res.printChessBoard()
+
+mainBet()

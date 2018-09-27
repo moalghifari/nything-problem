@@ -1,13 +1,12 @@
 import constants
-import State
+from State import State
 import numpy
 import random
 import Pawn
 from copy import deepcopy
 import helper
 
-def Solve(state, type, value) :
-    state.printChessBoard()
+def solve(state, type, value) :
     if (state.totalHeuristic == 0):
         return state
     tempSolution = deepcopy(state)
@@ -31,6 +30,16 @@ def Solve(state, type, value) :
         else :
             temperatur = temperatur*(1-int(value))
         i=+1
-        tempSolution.printChessBoard()
-        print(tempSolution.totalHeuristic)
     return tempSolution
+
+def solveSimulatedAnnealing(pawnInput):
+    print ("Solusi SA")
+    print(" *•.¸*•.¸¤ Pilih jenis temperatur yang diinginkan ¤¸.•*¸.•* "),
+    print(">> 1. Constant")
+    print(">> 2. Linear")
+    print(">> 3. Logaritmic\n")
+    inputT = input(">> Pilihan : ")
+    print(" *•.¸*•.¸¤ Masukan Nilai Pengurangan Temperatur ¤¸.•*¸.•* "),
+    value = input(">> ")
+    initState = State(pawnInput=pawnInput)
+    return solve(initState, inputT, value)

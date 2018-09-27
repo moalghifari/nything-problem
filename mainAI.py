@@ -1,3 +1,4 @@
+import geneticalgorithm
 import SimulatedAnnealing
 import State
 import hillClimbing
@@ -43,26 +44,19 @@ def main() :
         str = input(">> Pilihan : ")
     if (int(str) == 1) :
         print ("Solusi HC")
-        #state =
-        #heuristic =
+        finalState = hillClimbing.solveHill(pawnInput)
     elif (int(str) == 2) :
         print ("Solusi SA")
-        print(" *•.¸*•.¸¤ Pilih jenis temperatur yang diinginkan ¤¸.•*¸.•* "),
-        print(">> 1. Constant")
-        print(">> 2. Linear")
-        print(">> 3. Logaritmic\n")
-        inputT = input(">> Pilihan : ")
-        print(" *•.¸*•.¸¤ Masukan Nilai Pengurangan Temperatur ¤¸.•*¸.•* "),
-        value = input(">> ")
-        initState = State.State(pawnInput=pawnInput)
-        print(initState.listOfPawn)
-        finalState = SimulatedAnnealing.Solve(initState, inputT, value)
-        heuristic = finalState.totalHeuristic
+        finalState = SimulatedAnnealing.solveSimulatedAnnealing(pawnInput)
     else :
-        print ("Solusi GA")
-        #state =
-        #heuristic =
-    
-
+        print ("\n-- Solusi GA --")
+        result = geneticalgorithm.main(pawnInput)
+        print('Total Generasi: {}'.format(result['generation']))
+        print('Populasi: {}'.format(result['population']))
+        print('Mutation Rate: {}'.format(result['mutationRate']))
+        finalState = result['state']
+        
+    finalState.printChessBoard()
+    print(finalState.sameColorHeuristic, finalState.diffColorHeuristic)
 if __name__ == '__main__' :
     main()

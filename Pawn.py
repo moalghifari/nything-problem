@@ -14,56 +14,56 @@ class Pawn:
         else :
             return False
 
-    def checkHorizontal(self) :
+    def checkHorizontal(self, chessBoard) :
         PossibleMove = []
         # check right
         for i in range(1,8) :
-            if (self.outChessBoard(self.x+i, self.y)) :
+            if (self.outChessBoard(self.x+i, self.y) or (chessBoard[self.y][self.x+i] != '.')) :
                 break
             else :
                 PossibleMove.append([self.x+i, self.y])
         # check left
         for i in range(1,8) :
-            if (self.outChessBoard(self.x-i, self.y)) :
+            if (self.outChessBoard(self.x-i, self.y) or (chessBoard[self.y][self.x-i] != '.')) :
                 break
             else :
                 PossibleMove.append([self.x-i, self.y])
         # check down
         for i in range(1,8) :
-            if (self.outChessBoard(self.x, self.y+i)) :
+            if (self.outChessBoard(self.x, self.y+i) or (chessBoard[self.y+i][self.x] != '.')) :
                 break
             else :
                 PossibleMove.append([self.x,self.y+i])
         # check up
         for i in range(7) :
-            if (self.outChessBoard(self.x, self.y-i)) :
+            if (self.outChessBoard(self.x, self.y-i) or (chessBoard[self.y-i][self.x] != '.')) :
                 break
             else :
                 PossibleMove.append([self.x,self.y-i])
         return PossibleMove
-    def checkDiagonal(self) :
+    def checkDiagonal(self, chessBoard) :
         PossibleMove = []
         # check diagonal down right
         for i in range(1,8) :
-            if (self.outChessBoard(self.x+i, self.y+i)) :
+            if (self.outChessBoard(self.x+i, self.y+i) or (chessBoard[self.y+i][self.x+i] != '.')) :
                 break
             else :
                 PossibleMove.append([self.x+i, self.y+i])
         # check diagonal up left
         for i in range(1,8) :
-            if (self.outChessBoard(self.x-i, self.y-i)) :
+            if (self.outChessBoard(self.x-i, self.y-i) or (chessBoard[self.y-i][self.x-i] != '.')) :
                 break
             else :
                 PossibleMove.append([self.x-i, self.y-i])
         # check diagonal down left
         for i in range(1,8) :
-            if (self.outChessBoard(self.x-i, self.y+i)) :
+            if (self.outChessBoard(self.x-i, self.y+i) or (chessBoard[self.y+i][self.x-i] != '.')) :
                 break
             else :
                 PossibleMove.append([self.x-i, self.y+i])
         # check diagonal up right
         for i in range(1,8) :
-            if (self.outChessBoard(self.x+i, self.y-i)) :
+            if (self.outChessBoard(self.x+i, self.y-i) or (chessBoard[self.y-i][self.x+i] != '.')) :
                 break
             else :
                 PossibleMove.append([self.x+i, self.y-i])
@@ -126,12 +126,12 @@ class Pawn:
             if (not(self.outChessBoard(self.x-1, self.y-2)) and (chessBoard[self.y-2][self.x-1] == '.')) : self.listOfPossibleMove.append([self.x-1, self.y-2])
             if (not(self.outChessBoard(self.x-2, self.y-1)) and (chessBoard[self.y-1][self.x-2] == '.')) : self.listOfPossibleMove.append([self.x-2, self.y-1])
         elif (self.type == 'Q' or self.type == 'q') :
-            self.listOfPossibleMove.extend(self.checkDiagonal())
-            self.listOfPossibleMove.extend(self.checkHorizontal())
+            self.listOfPossibleMove.extend(self.checkDiagonal(chessBoard))
+            self.listOfPossibleMove.extend(self.checkHorizontal(chessBoard))
         elif (self.type == 'R' or self.type == 'r') :
-            self.listOfPossibleMove = self.checkHorizontal()
+            self.listOfPossibleMove = self.checkHorizontal(chessBoard)
         elif (self.type == 'B' or self.type == 'b') :
-            self.listOfPossibleMove = self.checkDiagonal()
+            self.listOfPossibleMove = self.checkDiagonal(chessBoard)
 
     def calcHeuristic(self, chessBoard, pawn_color) :
         heuristic = 0

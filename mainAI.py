@@ -42,20 +42,11 @@ def main() :
         print(">> Masukan Salah !")
         str = input(">> Pilihan : ")
     if (int(str) == 1) :
-        finalState = hillClimbing.solveHill(pawnInput)
         print ("Solusi HC")
+        finalState = hillClimbing.solveHill(pawnInput)
     elif (int(str) == 2) :
         print ("Solusi SA")
-        print(" *•.¸*•.¸¤ Pilih jenis temperatur yang diinginkan ¤¸.•*¸.•* "),
-        print(">> 1. Constant")
-        print(">> 2. Linear")
-        print(">> 3. Logaritmic\n")
-        inputT = input(">> Pilihan : ")
-        print(" *•.¸*•.¸¤ Masukan Nilai Pengurangan Temperatur ¤¸.•*¸.•* "),
-        value = input(">> ")
-
-        initState = State.State(pawnInput=pawnInput)
-        finalState = SimulatedAnnealing.Solve(initState, inputT, value)
+        finalState = SimulatedAnnealing.solveSimulatedAnnealing(pawnInput)
     else :
         print ("Solusi GA")
         # finalState = 

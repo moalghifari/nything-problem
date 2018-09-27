@@ -16,7 +16,7 @@ def main(pawnInput):
 # fitness function = 1 - heuristic / totalPopulationHeuristic
 
 def solve(population):
-  totalPopulationHeuristic = 0
+  totalPopulationHeuristic = 0.0
   fitness = []
   childrenPopulation = []
 
@@ -30,7 +30,12 @@ def solve(population):
 
   # calculate fitness function for each individual
   for individual in population:
-    fitness.append(1 - float(individual.getTotalHeuristic()) / totalPopulationHeuristic)
+    fitness.append(1 - individual.totalHeuristic / totalPopulationHeuristic)
+
+  print('Total Heuristik Populasi: ' + str(totalPopulationHeuristic))
+  for individual in population:
+    print('individu: ' + str(individual.totalHeuristic))
+  print(fitness)
 
   for _ in range(int(ceil(POPULATION_NUMBER/2.0))):
     # choose 2 parents randomly based on the fitness function

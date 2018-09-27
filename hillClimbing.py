@@ -26,7 +26,7 @@ def solve(currentState):
         return currentState
     listOfStateCandidates = generateStateCandidates(currentState)
     minimalHeuristicState = getMinimalHeuristicState(listOfStateCandidates)
-    print(currentState.totalHeuristic, minimalHeuristicState.totalHeuristic)
+    print(currentState.sameColorHeuristic, currentState.diffColorHeuristic)
     if (minimalHeuristicState.totalHeuristic < currentState.totalHeuristic):
         return solve(minimalHeuristicState)
     else:

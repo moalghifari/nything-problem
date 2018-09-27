@@ -1,3 +1,4 @@
+import geneticalgorithm
 import SimulatedAnnealing
 import State
 import hillClimbing
@@ -48,9 +49,13 @@ def main() :
         print ("Solusi SA")
         finalState = SimulatedAnnealing.solveSimulatedAnnealing(pawnInput)
     else :
-        print ("Solusi GA")
-        # finalState = 
-    
+        print ("\n-- Solusi GA --")
+        result = geneticalgorithm.main(pawnInput)
+        print('Total Generasi: {}'.format(result['generation']))
+        print('Populasi: {}'.format(result['population']))
+        print('Mutation Rate: {}'.format(result['mutationRate']))
+        finalState = result['state']
+        
     finalState.printChessBoard()
     print(finalState.sameColorHeuristic, finalState.diffColorHeuristic)
 if __name__ == '__main__' :

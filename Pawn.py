@@ -117,14 +117,14 @@ class Pawn:
     def generatePossibleMoves(self, chessBoard) :
         self.listOfPossibleMove = []
         if (self.type == 'K' or self.type == 'k') :
-            if (not(self.outChessBoard(self.x+1, self.y+2))) : self.listOfPossibleMove.append([self.x+1, self.y+2])
-            if (not(self.outChessBoard(self.x+2, self.y+1))) : self.listOfPossibleMove.append([self.x+2, self.y+1])
-            if (not(self.outChessBoard(self.x+1, self.y-2))) : self.listOfPossibleMove.append([self.x+1, self.y-2])
-            if (not(self.outChessBoard(self.x+2, self.y-1))) : self.listOfPossibleMove.append([self.x+2, self.y-1])
-            if (not(self.outChessBoard(self.x-1, self.y+2))) : self.listOfPossibleMove.append([self.x-1, self.y+2])
-            if (not(self.outChessBoard(self.x-2, self.y+1))) : self.listOfPossibleMove.append([self.x-2, self.y+1])
-            if (not(self.outChessBoard(self.x-1, self.y-2))) : self.listOfPossibleMove.append([self.x-1, self.y-2])
-            if (not(self.outChessBoard(self.x-2, self.y-1))) : self.listOfPossibleMove.append([self.x-2, self.y-1])
+            if (not(self.outChessBoard(self.x+1, self.y+2)) and (chessBoard[self.y+2][self.x+1] == '.')) : self.listOfPossibleMove.append([self.x+1, self.y+2])
+            if (not(self.outChessBoard(self.x+2, self.y+1)) and (chessBoard[self.y+1][self.x+2] == '.')) : self.listOfPossibleMove.append([self.x+2, self.y+1])
+            if (not(self.outChessBoard(self.x+1, self.y-2)) and (chessBoard[self.y-2][self.x+1] == '.')) : self.listOfPossibleMove.append([self.x+1, self.y-2])
+            if (not(self.outChessBoard(self.x+2, self.y-1)) and (chessBoard[self.y-1][self.x+2] == '.')) : self.listOfPossibleMove.append([self.x+2, self.y-1])
+            if (not(self.outChessBoard(self.x-1, self.y+2)) and (chessBoard[self.y+2][self.x-1] == '.')) : self.listOfPossibleMove.append([self.x-1, self.y+2])
+            if (not(self.outChessBoard(self.x-2, self.y+1)) and (chessBoard[self.y+1][self.x-2] == '.')) : self.listOfPossibleMove.append([self.x-2, self.y+1])
+            if (not(self.outChessBoard(self.x-1, self.y-2)) and (chessBoard[self.y-2][self.x-1] == '.')) : self.listOfPossibleMove.append([self.x-1, self.y-2])
+            if (not(self.outChessBoard(self.x-2, self.y-1)) and (chessBoard[self.y-1][self.x-2] == '.')) : self.listOfPossibleMove.append([self.x-2, self.y-1])
         elif (self.type == 'Q' or self.type == 'q') :
             self.listOfPossibleMove.extend(self.checkDiagonal())
             self.listOfPossibleMove.extend(self.checkHorizontal())
@@ -177,7 +177,10 @@ class Pawn:
     def move(self, possibleMove, chessBoard):
         self.x = possibleMove[0]
         self.y = possibleMove[1]
+        self.generatePossibleMoves(chessBoard)
 
+    def isEqual(self, pawn):
+        return (self.type == pawn.type and self.x == pawn.x and self.y == pawn.y)
 
 def main() :
     CHESS_BOARD = [
@@ -191,11 +194,8 @@ def main() :
         ['.','.','.','.','.','.','.','.']
     ]
     a = Pawn("K", 4, 2)
-    n = a.generatePossibleMoves(CHESS_BOARD)
-    j = a.calcSameColorHeuristic(CHESS_BOARD)
-    print("this pawn = ", a.type, a.x, a.y)
-    print("possible moves = ", n)
-    print("same color heuristic = ", j)
+    b = Pawn("K", 4, 2)
+    print(a.isEqual(b))
 
 
 if __name__ == '__main__':

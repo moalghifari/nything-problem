@@ -8,7 +8,8 @@ def generateStateCandidates(currentState):
         pawn.generatePossibleMoves(tempState.chessBoard)
         for possibleMove in pawn.listOfPossibleMove:
             newState = copy.deepcopy(tempState)
-            newState.move(pawn, possibleMove)
+            newPawn = newState.searchPawn(pawn)
+            newState.move(newPawn, possibleMove)
             listOfStateCandidates.append(newState)
     return listOfStateCandidates
 
@@ -34,4 +35,3 @@ def solve(currentState):
 def solveHill(pawnInput):
     initState = State(pawnInput=pawnInput)
     return solve(initState)
-    

@@ -1,3 +1,4 @@
+import geneticalgorithm
 import SimulatedAnnealing
 import State
 import hillClimbing
@@ -54,7 +55,7 @@ def main() :
         print('Populasi: {}'.format(result['population']))
         print('Mutation Rate: {}'.format(result['mutationRate']))
         finalState = result['state']
-
+        
     finalState.printChessBoard()
     print(finalState.sameColorHeuristic, finalState.diffColorHeuristic)
 if __name__ == '__main__' :

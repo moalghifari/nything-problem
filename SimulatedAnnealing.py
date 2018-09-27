@@ -8,6 +8,7 @@ import helper
 
 def Solve(state, type, value) :
     state.printChessBoard()
+    print(state.sameColorHeuristic, state.diffColorHeuristic)
     if (state.totalHeuristic == 0):
         return state
     tempSolution = deepcopy(state)

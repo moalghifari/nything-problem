@@ -1,5 +1,7 @@
-from hillClimbing import solveHill
 import geneticalgorithm
+import SimulatedAnnealing
+import State
+import hillClimbing
 
 def main() :
     print("\n▀ ▄ ░ ▀ ▄ ░     █▀▀▄ ░ ░ █░░█ ▀▀█▀▀ █░░█ ░▀░ █▀▀▄ █▀▀▀     ░ ▄ ▀ ░ ▄ ▀")
@@ -41,15 +43,11 @@ def main() :
         print(">> Masukan Salah !")
         str = input(">> Pilihan : ")
     if (int(str) == 1) :
-        finalState = solveHill(pawnInput)
         print ("Solusi HC")
+        finalState = hillClimbing.solveHill(pawnInput)
     elif (int(str) == 2) :
         print ("Solusi SA")
-        print(" *•.¸*•.¸¤ Pilih jenis temperatur yang diinginkan ¤¸.•*¸.•* "),
-        print(">> 1. Constant")
-        print(">> 2. Linear")
-        print(">> 3. Logaritmic\n")
-        inputT = input(">> Pilihan : ")
+        finalState = SimulatedAnnealing.solveSimulatedAnnealing(pawnInput)
     else :
         print ("\n-- Solusi GA --")
         result = geneticalgorithm.main(pawnInput)
@@ -57,8 +55,8 @@ def main() :
         print('Populasi: {}'.format(result['population']))
         print('Mutation Rate: {}'.format(result['mutationRate']))
         finalState = result['state']
-
+        
     finalState.printChessBoard()
-    print(finalState.calcSameColorHeuristic(), finalState.calcDiffColorHeuristic())
+    print(finalState.sameColorHeuristic, finalState.diffColorHeuristic)
 if __name__ == '__main__' :
     main()

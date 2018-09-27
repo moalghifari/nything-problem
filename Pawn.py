@@ -3,18 +3,29 @@ from constants import WHITE_PAWN, BLACK_PAWN
 
 class Pawn:
     def __init__(self, type, x, y) :
+        """
+            This is a constructor
+            currentPawn is a dictionary
+        """
         self.type = type
         self.x = x
         self.y = y
         self.listOfPossibleMove = []
 
     def outChessBoard(self, x, y) :
+        """
+            return True if a point is outside the chess board
+        """
         if (x < 0 or x > 7 or y < 0 or y > 7) :
             return True
         else :
             return False
 
     def checkHorizontal(self, chessBoard) :
+        """
+            return possible move points of pawn by checking from horizontal and vertical side
+            use for Rook and Queen
+        """
         PossibleMove = []
         # check right
         for i in range(1,8) :
@@ -42,6 +53,10 @@ class Pawn:
                 PossibleMove.append([self.x,self.y-i])
         return PossibleMove
     def checkDiagonal(self, chessBoard) :
+        """
+            return possible move points of pawn by checking from diagonal side
+            use for Bishop and Queen
+        """
         PossibleMove = []
         # check diagonal down right
         for i in range(1,8) :
@@ -70,6 +85,10 @@ class Pawn:
         return PossibleMove
 
     def checkHorizontalHeuristic(self, pawn_color, Board) :
+        """
+            return heuristic of pawn by checking from horizontal and vertical side
+            use for Rook and Queen
+        """
         heuristic = 0
         # horizontal check
         for n in range(1,8) :
@@ -91,6 +110,10 @@ class Pawn:
                 break
         return heuristic
     def checkDiagonalHeuristic(self, pawn_color, Board) :
+        """
+            return heuristic of pawn by checking from diagonal side
+            use for Bishop and Queen
+        """
         heuristic = 0
         # diagonal down right check
         for n in range(1,8) :
@@ -115,6 +138,9 @@ class Pawn:
         return heuristic
 
     def generatePossibleMoves(self, chessBoard) :
+        """
+            return possible move points of pawn based on the type
+        """
         self.listOfPossibleMove = []
         if (self.type == 'K' or self.type == 'k') :
             if (not(self.outChessBoard(self.x+1, self.y+2)) and (chessBoard[self.y+2][self.x+1] == '.')) : self.listOfPossibleMove.append([self.x+1, self.y+2])
@@ -134,6 +160,10 @@ class Pawn:
             self.listOfPossibleMove = self.checkDiagonal(chessBoard)
 
     def calcHeuristic(self, chessBoard, pawn_color) :
+        """
+            return heuristic of pawn based on the type
+            heuristic is the number of pawn that can be attacked by itself
+        """
         heuristic = 0
         if (self.type == 'K' or self.type == 'k') :
             if (not(self.outChessBoard(self.x+1, self.y-2)) and chessBoard[self.y-2][self.x+1] in pawn_color) :
@@ -161,6 +191,11 @@ class Pawn:
         return heuristic
 
     def calcSameColorHeuristic(self, chessBoard) :
+        """
+            return the same color pawn heuristic
+            if black pawn then search for black pawn
+            if white pawn then search for white pawn
+        """
         if (self.type == 'K' or self.type == 'Q' or self.type == 'B' or self.type == 'R' ) :
             pawn_color = WHITE_PAWN
         else :
@@ -168,35 +203,27 @@ class Pawn:
         return self.calcHeuristic(chessBoard, pawn_color)
 
     def calcDiffColorHeuristic(self, chessBoard) :
+        """
+            return the different color pawn heuristic
+            if black pawn then search for white pawn
+            if white pawn then search for black pawn
+        """
         if (self.type == 'K' or self.type == 'Q' or self.type == 'B' or self.type == 'R' ) :
             pawn_color = BLACK_PAWN
         else :
             pawn_color = WHITE_PAWN
         return self.calcHeuristic(chessBoard, pawn_color)
 
-    def move(self, possibleMove, chessBoard):
-        self.x = possibleMove[0]
-        self.y = possibleMove[1]
+    def move(self, currentPosition, chessBoard):
+        """
+            update list of PossibleMove and position of pawn
+        """
+        self.x = currentPosition[0]
+        self.y = currentPosition[1]
         self.generatePossibleMoves(chessBoard)
 
     def isEqual(self, pawn):
+        """
+            return True if input pawn is equal with itself
+        """
         return (self.type == pawn.type and self.x == pawn.x and self.y == pawn.y)
-
-def main() :
-    CHESS_BOARD = [
-        ['Q','.','.','.','.','Q','.','.'],
-        ['.','.','.','.','.','.','.','.'],
-        ['.','.','B','.','K','.','.','.'],
-        ['.','.','.','.','.','.','.','.'],
-        ['.','.','Q','.','.','.','k','.'],
-        ['.','B','.','.','R','.','.','.'],
-        ['.','.','.','.','.','.','.','.'],
-        ['.','.','.','.','.','.','.','.']
-    ]
-    a = Pawn("K", 4, 2)
-    b = Pawn("K", 4, 2)
-    print(a.isEqual(b))
-
-
-if __name__ == '__main__':
-    main()

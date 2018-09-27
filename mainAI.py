@@ -1,4 +1,5 @@
 from hillClimbing import solveHill
+import geneticalgorithm
 
 def main() :
     print("\n▀ ▄ ░ ▀ ▄ ░     █▀▀▄ ░ ░ █░░█ ▀▀█▀▀ █░░█ ░▀░ █▀▀▄ █▀▀▀     ░ ▄ ▀ ░ ▄ ▀")
@@ -50,7 +51,13 @@ def main() :
         print(">> 3. Logaritmic\n")
         inputT = input(">> Pilihan : ")
     else :
-        print ("Solusi GA")
+        print ("\n-- Solusi GA --")
+        result = geneticalgorithm.main(pawnInput)
+        print('Total Generasi: {}'.format(result['generation']))
+        print('Populasi: {}'.format(result['population']))
+        print('Mutation Rate: {}'.format(result['mutationRate']))
+        finalState = result['state']
+
     finalState.printChessBoard()
     print(finalState.calcSameColorHeuristic(), finalState.calcDiffColorHeuristic())
 if __name__ == '__main__' :

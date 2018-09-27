@@ -40,13 +40,8 @@ def main() :
         print(">> Masukan Salah !")
         str = input(">> Pilihan : ")
     if (int(str) == 1) :
-<<<<<<< Updated upstream
-        solveHill(pawnInput)
-=======
+        finalState = solveHill(pawnInput)
         print ("Solusi HC")
-        state =
-        heuristic =
->>>>>>> Stashed changes
     elif (int(str) == 2) :
         print ("Solusi SA")
         print(" *•.¸*•.¸¤ Pilih jenis temperatur yang diinginkan ¤¸.•*¸.•* "),
@@ -54,14 +49,9 @@ def main() :
         print(">> 2. Linear")
         print(">> 3. Logaritmic\n")
         inputT = input(">> Pilihan : ")
-        
-        state =
-        heuristic =
     else :
         print ("Solusi GA")
-        state =
-        heuristic =
-    state.printChessBoard()
-    print(heuristic,' ','0')
+    finalState.printChessBoard()
+    print(finalState.calcSameColorHeuristic(), finalState.calcDiffColorHeuristic())
 if __name__ == '__main__' :
     main()

@@ -13,9 +13,9 @@ class State:
             self.generateRandomChessBoard(pawnInput)
         if (listOfPawn and (chessBoard == constants.EMPTY_CHESS_BOARD)):
             self.generateChessBoardByListOfPawn()
-        self.sameColorHeuristic = self.calcSameColorHeuristic
-        self.diffColorHeuristic = self.calcDiffColorHeuristic
-        self.totalHeuristic = self.calcTotalHeuristic
+        self.sameColorHeuristic = self.calcSameColorHeuristic()
+        self.diffColorHeuristic = self.calcDiffColorHeuristic()
+        self.totalHeuristic = self.calcTotalHeuristic()
 
     def generateChessBoardByListOfPawn(self):
         for pawn in self.listOfPawn:
@@ -47,8 +47,26 @@ class State:
 
     def move(self, pawn, possibleMove):
         self.chessBoard[pawn.y][pawn.x] = '.'
-        self.chessBoard[possibleMove.y][possibleMove.x] = pawn.type
-        pawn.move(possibleMove)
+        self.chessBoard[possibleMove[1]][possibleMove[0]] = pawn.type
+        pawn.move(possibleMove, self.chessBoard)
+        self.sameColorHeuristic = self.calcSameColorHeuristic()
+        self.diffColorHeuristic = self.calcDiffColorHeuristic()
+        self.totalHeuristic = self.calcTotalHeuristic()
+
+    def calcSameColorHeuristic(self):
+        heuristic = 0
+        for pawn in self.listOfPawn:
+            heuristic += pawn.calcSameColorHeuristic(self.chessBoard)
+        return heuristic
+    
+    def calcDiffColorHeuristic(self):
+        heuristic = 0
+        for pawn in self.listOfPawn:
+            heuristic += pawn.calcDiffColorHeuristic(self.chessBoard)
+        return heuristic
+
+    def calcTotalHeuristic(self):
+        return (self.calcSameColorHeuristic())
 
 
 # Test Main Program
@@ -71,16 +89,10 @@ def main():
     ]
     state = State(pawnInput=pawnInput)
     state.printChessBoard()
-    # print(state.listOfPawn)
-
-    for i in state.listOfPawn:
-        print(i.type, i.x, i.y)
-
-    pawn1 = state.listOfPawn[0]
-    print("List of possible moves pawn ", pawn1.type, pawn1.x, pawn1.y)
-    pawn1.generatePossibleMoves(state.chessBoard)
-    print(pawn1.listOfPossibleMove)
-    print("same color heuristic = ", pawn1.calcSameColorHeuristic(state.chessBoard))
+    
+    print("DiffColorHeuristic : ", state.calcDiffColorHeuristic())
+    print("SameColorHeuristic : ", state.calcSameColorHeuristic())
+    print("TotalHeuristic : ", state.calcTotalHeuristic())
 
 if __name__ == '__main__':
     main()

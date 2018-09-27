@@ -7,8 +7,6 @@ class Pawn:
         self.x = x
         self.y = y
         self.listOfPossibleMove = []
-        self.sameColorHeuristic = 0
-        self.diffColorHeuristic = 0
 
     def outChessBoard(self, x, y) :
         if (x < 0 or x > 7 or y < 0 or y > 7) :
@@ -117,6 +115,7 @@ class Pawn:
         return heuristic
 
     def generatePossibleMoves(self, chessBoard) :
+        self.listOfPossibleMove = []
         if (self.type == 'K' or self.type == 'k') :
             if (not(self.outChessBoard(self.x+1, self.y+2))) : self.listOfPossibleMove.append([self.x+1, self.y+2])
             if (not(self.outChessBoard(self.x+2, self.y+1))) : self.listOfPossibleMove.append([self.x+2, self.y+1])
@@ -133,7 +132,6 @@ class Pawn:
             self.listOfPossibleMove = self.checkHorizontal()
         elif (self.type == 'B' or self.type == 'b') :
             self.listOfPossibleMove = self.checkDiagonal()
-        return self.listOfPossibleMove
 
     def calcHeuristic(self, chessBoard, pawn_color) :
         heuristic = 0
@@ -175,6 +173,10 @@ class Pawn:
         else :
             pawn_color = WHITE_PAWN
         return self.calcHeuristic(chessBoard, pawn_color)
+
+    def move(self, possibleMove, chessBoard):
+        self.x = possibleMove[0]
+        self.y = possibleMove[1]
 
 
 def main() :

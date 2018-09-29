@@ -3,42 +3,110 @@ from math import ceil
 from copy import deepcopy
 from time import sleep
 from random import randint
+from sys import stdout
 
 from State import State
+from InvalidInputError import InvalidInputError
 
 POPULATION_NUMBER = 10
-MUTATION_RATE = 0.1
+MUTATION_RATE = 0.2
+GENERATION_LIMIT = 2000
 
+def inputGA():
+  global POPULATION_NUMBER, MUTATION_RATE, GENERATION_LIMIT
+
+  # Input POPULATION_NUMBER
+  while True:
+    inputPopNumber = input('\rMasukkan Jumlah Populasi (default=10): ')
+    if inputPopNumber == '':
+      break
+    try:
+      inputPopNumber = int(inputPopNumber)
+      if inputPopNumber <= 1:
+        raise InvalidInputError
+      POPULATION_NUMBER = inputPopNumber
+      break
+    except ValueError:
+      stdout.write('\rMasukan bukan angka, coba lagi')
+      # stdout.flush()
+      sleep(2)
+    except InvalidInputError:
+      stdout.write('\rMasukan harus lebih dari 1, coba lagi')
+      # stdout.flush()
+      sleep(2)
+  
+  # Input MUTATION_RATE
+  while True:
+    inputMutRate = input('\rMasukkan Mutation Rate (default=0.2): ')
+    if inputMutRate == '':
+      break
+    try:
+      inputMutRate = float(inputMutRate)
+      if inputMutRate <= 0:
+        raise InvalidInputError
+      MUTATION_RATE = inputMutRate
+      break
+    except ValueError:
+      stdout.write('\rMasukan bukan float, coba lagi')
+      stdout.flush()
+      sleep(2)
+    except InvalidInputError:
+      stdout.write('\rMasukan harus lebih dari 0.0, coba lagi')
+      stdout.flush()
+      sleep(2)
+
+  # Input GENERATION_LIMIT
+  while True:
+    inputGenLimit = input('\rMasukkan Batas Generasi (default=2000): ')
+    if inputGenLimit == '':
+      break
+    try:
+      inputGenLimit = int(inputGenLimit)
+      if inputGenLimit <= 0:
+        raise InvalidInputError
+      GENERATION_LIMIT = inputGenLimit
+      break
+    except ValueError:
+      stdout.write('\rMasukan bukan angka, coba lagi')
+      stdout.flush()
+      sleep(2)
+    except InvalidInputError:
+      stdout.write('\rMasukan harus lebih dari 0, coba lagi')
+      stdout.flush()
+      sleep(2)
 
 def main(pawnInput):
+  inputGA()
+
   population = generateListOfRandomPopulation(POPULATION_NUMBER, pawnInput)
   generation = 0
+  bestIndividual = None
 
-  # while generation <= 5000:
-  while True:
+  while generation <= GENERATION_LIMIT:
+    stdout.write('\rGeneration: {}'.format(generation))
     population = solve(population)
+    if (bestIndividual == None or bestIndividual.totalHeuristic > population[0].totalHeuristic):
+      bestIndividual = population[0]
     generation += 1
     if (population[0].totalHeuristic == 0):
       break
+  
+  print('\nPopulasi: {}'.format(POPULATION_NUMBER))
+  print('Mutation Rate: {}'.format(MUTATION_RATE))
 
-  result = {
-    'state': population[0],
-    'population': POPULATION_NUMBER,
-    'generation': generation,
-    'mutationRate': MUTATION_RATE
-  }
-
-  return result
+  return bestIndividual
 
 # totalPopulationHeuristic: sum of all heuristic of all states in population
 # fitness function = 1 - heuristic / totalPopulationHeuristic
 
 def solve(population):
+  # sleep(3)
   totalPopulationHeuristic = 0.0
   fitness = []
   childrenPopulation = []
 
   population.sort(key=lambda individual: individual.totalHeuristic)
+
 
   for individual in population:
     totalPopulationHeuristic += individual.totalHeuristic
@@ -57,18 +125,25 @@ def solve(population):
 
   for _ in range(int(ceil(POPULATION_NUMBER/2.0))):
     # choose 2 parents randomly based on the fitness function
-    parent1 = random.choice(population, p=fitness)
+    parentIndex1 = random.choice(range(POPULATION_NUMBER), p=fitness)
     while True:
-      parent2 = random.choice(population, p=fitness)
-      if parent2 != parent1:
+      parentIndex2 = random.choice(range(POPULATION_NUMBER), p=fitness)
+      if parentIndex2 != parentIndex1:
         break
     # crossover those 2 parents, concate the children to childrenPopulation
-    childrenPopulation += crossOver(parent1, parent2)
+    childrenPopulation += crossOver(population[parentIndex1], population[parentIndex2])
   
   # If there is an odd number of population -> generate excess one children and needs to be removed
   if len(childrenPopulation) > POPULATION_NUMBER:
     childrenPopulation.pop()
 
+  # print('---')
+  # for individual in childrenPopulation:
+  #   print('-')
+  #   individual.printChessBoard()
+  #   for pawn in individual.listOfPawn:
+  #     print('{} {},{}'.format(pawn.type, pawn.x, pawn.y))
+  # print('---  ')
   return childrenPopulation
 
 def generateListOfRandomPopulation(populationNumber, pawnInput):
@@ -78,18 +153,49 @@ def generateListOfRandomPopulation(populationNumber, pawnInput):
   return population
 
 def crossOver(state1, state2):
+  # print('****************crossover*******************')
   children = []
   pawnCount = len(state1.listOfPawn)
 
   pivot = random.choice(range(pawnCount))
 
-  listOfPawn1 = deepcopy(state1.listOfPawn[:pivot] + state2.listOfPawn[pivot:])
-  listOfPawn2 = deepcopy(state2.listOfPawn[:pivot] + state1.listOfPawn[pivot:])
+  while True:
+    listOfPawn1 = deepcopy(state1.listOfPawn[:pivot] + state2.listOfPawn[pivot:])
+    listOfPawn2 = deepcopy(state2.listOfPawn[:pivot] + state1.listOfPawn[pivot:])
 
-  children.append(mutate(listOfPawn1))
-  children.append(mutate(listOfPawn2))
+    if not(isConflict(listOfPawn1)) and not(isConflict(listOfPawn2)):
+      children.append(mutate(listOfPawn1))
+      children.append(mutate(listOfPawn2))
+      return children
+    pivot = (pivot - 1) % (pawnCount + 1)
+
+  #  ------------
+
+  # childrenListOfPawn1 = deepcopy(state1).listOfPawn
+  # childrenListOfPawn2 = deepcopy(state2).listOfPawn
+
+  # for i in range(len(childrenListOfPawn1)):
+  #   temp1 = childrenListOfPawn1[i]
+  #   temp2 = childrenListOfPawn2[i]
+  #   if not(isPosOccupied(temp1.x, temp1.y, childrenListOfPawn2)) and  not(isPosOccupied(temp2.x, temp2.y, childrenListOfPawn1)): # and randint(0, 1):
+  #     # print('cross pawn {} with pawn {}'.format((temp1.x, temp1.y), (temp2.x, temp2.y)))
+  #     childrenListOfPawn1[i] = temp2
+  #     childrenListOfPawn2[i] = temp1
+  #   # else:
+  #   #   print('dont cross pawn {} with pawn {}'.format((temp1.x, temp1.y), (temp2.x, temp2.y)))
+  #   #   print('parent1: {}'.format(list((o.x, o.y) for o in state1.listOfPawn)))
+  #   #   print('parent2: {}'.format(list((o.x, o.y) for o in state2.listOfPawn)))
   
-  return children
+  # return [mutate(childrenListOfPawn1), mutate(childrenListOfPawn2)]
+
+def isConflict(listOfPawn):
+  for i in range(len(listOfPawn) - 1):
+    j = i + 1
+    while j < len(listOfPawn):
+      if listOfPawn[i].x == listOfPawn[j].x and listOfPawn[i].y == listOfPawn[j].y:
+        return True
+      j += 1
+  return False
 
 def isPosOccupied(x, y, listOfPawn):
   for pawn in listOfPawn:

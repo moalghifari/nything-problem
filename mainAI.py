@@ -50,11 +50,7 @@ def main() :
         finalState = SimulatedAnnealing.solveSimulatedAnnealing(pawnInput)
     else :
         print ("\n-- Solusi GA --")
-        result = geneticalgorithm.main(pawnInput)
-        print('Total Generasi: {}'.format(result['generation']))
-        print('Populasi: {}'.format(result['population']))
-        print('Mutation Rate: {}'.format(result['mutationRate']))
-        finalState = result['state']
+        finalState = geneticalgorithm.main(pawnInput)
         
     finalState.printChessBoard()
     print(finalState.sameColorHeuristic, finalState.diffColorHeuristic)

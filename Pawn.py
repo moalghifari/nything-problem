@@ -132,7 +132,7 @@ class Pawn:
                 break
         # diagonal up right check
         for n in range(1,8) :
-            if (not(self.outChessBoard(self.x+n, self.y+n)) and Board[self.y-n][self.x+n] in pawn_color) :
+            if (not(self.outChessBoard(self.x+n, self.y-n)) and Board[self.y-n][self.x+n] in pawn_color) :
                 heuristic += 1
                 break
         return heuristic

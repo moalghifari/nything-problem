@@ -12,12 +12,19 @@ MUTATION_RATE = 0.1
 
 def main(pawnInput):
   population = generateListOfRandomPopulation(POPULATION_NUMBER, pawnInput)
-  solvedResult = solve(population, 0)
+  generation = 0
+
+  # while generation <= 5000:
+  while True:
+    population = solve(population)
+    generation += 1
+    if (population[0].totalHeuristic == 0):
+      break
 
   result = {
-    'state': solvedResult['state'],
+    'state': population[0],
     'population': POPULATION_NUMBER,
-    'generation': solvedResult['generation'],
+    'generation': generation,
     'mutationRate': MUTATION_RATE
   }
 
@@ -26,21 +33,12 @@ def main(pawnInput):
 # totalPopulationHeuristic: sum of all heuristic of all states in population
 # fitness function = 1 - heuristic / totalPopulationHeuristic
 
-def solve(population, generation):
-  # sleep(1)
+def solve(population):
   totalPopulationHeuristic = 0.0
   fitness = []
   childrenPopulation = []
 
   population.sort(key=lambda individual: individual.totalHeuristic)
-
-  # check if there is a state with the best heuristic, if there is one, then return the state
-  for individual in population:
-    if individual.totalHeuristic == 0:
-      return {
-        'state': individual,
-        'generation': generation
-      }
 
   for individual in population:
     totalPopulationHeuristic += individual.totalHeuristic
@@ -71,7 +69,7 @@ def solve(population, generation):
   if len(childrenPopulation) > POPULATION_NUMBER:
     childrenPopulation.pop()
 
-  return solve(childrenPopulation, generation + 1)
+  return childrenPopulation
 
 def generateListOfRandomPopulation(populationNumber, pawnInput):
   population = []
@@ -112,31 +110,3 @@ def mutate(listOfPawn):
     return State(listOfPawn=listOfPawn)
   else:
     return State(listOfPawn=listOfPawn)
-
-
-def mainBet():
-  inputPawn = [
-    {
-      'pawnType': 'K',
-      'pawnCount': 2
-    }, 
-    {
-      'pawnType': 'B',
-      'pawnCount': 2
-    }, 
-    {
-      'pawnType': 'R',
-      'pawnCount': 2
-    }, 
-    {
-      'pawnType': 'Q',
-      'pawnCount': 2
-    }
-  ]
-
-  res = main(inputPawn)
-
-  res.printChessBoard()
-
-if __name__ == '__main__':
-  mainBet()

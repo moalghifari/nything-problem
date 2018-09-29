@@ -33,7 +33,7 @@ class State:
             while True:
                 x = randint(0, 7)
                 y = randint(0, 7)
-                if (self.chessBoard[x][y] == '.'):
+                if (self.chessBoard[y][x] == '.'):
                     break
 
             newPawn = Pawn(pawnType, x, y)

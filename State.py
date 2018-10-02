@@ -72,31 +72,3 @@ class State:
         for pawn in self.listOfPawn:
             if (pawn.isEqual(pawnX)):
                 return pawn
-
-# Test Main Program
-def main():
-    #TES
-    pawnInput = [
-        {
-            'pawnType': 'K',
-            'pawnCount': 2
-        }, {
-            'pawnType':'B',
-            'pawnCount': 2
-        }, {
-            'pawnType':'R',
-            'pawnCount': 2
-        }, {
-            'pawnType':'Q',
-            'pawnCount': 2
-        }
-    ]
-    state = State(pawnInput=pawnInput)
-    state.printChessBoard()
-    
-    print("DiffColorHeuristic : ", state.calcDiffColorHeuristic())
-    print("SameColorHeuristic : ", state.calcSameColorHeuristic())
-    print("TotalHeuristic : ", state.calcTotalHeuristic())
-
-if __name__ == '__main__':
-    main()

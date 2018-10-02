@@ -32,7 +32,7 @@ def solve(state, type, value) :
         i=+1
     return tempSolution
 
-def solveSimulatedAnnealing(pawnInput):
+def main(pawnInput):
     print ("Solusi SA")
     print(" *•.¸*•.¸¤ Pilih jenis temperatur yang diinginkan ¤¸.•*¸.•* "),
     print(">> 1. Constant")

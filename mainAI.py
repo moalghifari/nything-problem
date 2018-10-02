@@ -3,11 +3,7 @@ import SimulatedAnnealing
 import State
 import hillClimbing
 
-def main() :
-    print("\n▀ ▄ ░ ▀ ▄ ░     █▀▀▄ ░ ░ █░░█ ▀▀█▀▀ █░░█ ░▀░ █▀▀▄ █▀▀▀     ░ ▄ ▀ ░ ▄ ▀")
-    print("░ ░ █ ░ ░ █     █░░█ ▀ ▀ █▄▄█ ░░█░░ █▀▀█ ▀█▀ █░░█ █░▀█     █ ░ ░ █ ░ ░")
-    print("▄ ▀ ░ ▄ ▀ ░     ▀░░▀ ░ ░ ▄▄▄█ ░░▀░░ ▀░░▀ ▀▀▀ ▀░░▀ ▀▀▀▀     ░ ▀ ▄ ░ ▀ ▄\n")
-    fname = input("Masukan Nama File Input Bidak Catur : ")
+def input_pawn(fname):
     with open(fname) as f:
         getLine = f.readlines()
     
@@ -32,8 +28,14 @@ def main() :
                 pawnInput.append({'pawnType': 'r','pawnCount': int(dataPawn[2])})
             else :
                 pawnInput.append({'pawnType': 'q','pawnCount': int(dataPawn[2])})
-    #print(pawnInput)
+    return pawnInput
 
+def main() :
+    print("\n▀ ▄ ░ ▀ ▄ ░     █▀▀▄ ░ ░ █░░█ ▀▀█▀▀ █░░█ ░▀░ █▀▀▄ █▀▀▀     ░ ▄ ▀ ░ ▄ ▀")
+    print("░ ░ █ ░ ░ █     █░░█ ▀ ▀ █▄▄█ ░░█░░ █▀▀█ ▀█▀ █░░█ █░▀█     █ ░ ░ █ ░ ░")
+    print("▄ ▀ ░ ▄ ▀ ░     ▀░░▀ ░ ░ ▄▄▄█ ░░▀░░ ▀░░▀ ▀▀▀ ▀░░▀ ▀▀▀▀     ░ ▀ ▄ ░ ▀ ▄\n")
+    fname = input("Masukan Nama File Input Bidak Catur : ")
+    pawnInput = input_pawn(fname)
     print(" *•.¸*•.¸¤ Pilih Algoritma local search yang digunakan ¤¸.•*¸.•* "),
     print(">> 1. Hill Climbing")
     print(">> 2. Simulated Annealing")
@@ -43,13 +45,13 @@ def main() :
         print(">> Masukan Salah !")
         str = input(">> Pilihan : ")
     if (int(str) == 1) :
-        print ("Solusi HC")
-        finalState = hillClimbing.solveHill(pawnInput)
+        print ("\n-- Solusi Hill Climbing --")
+        finalState = hillClimbing.main(pawnInput)
     elif (int(str) == 2) :
-        print ("Solusi SA")
-        finalState = SimulatedAnnealing.solveSimulatedAnnealing(pawnInput)
+        print ("\n-- Solusi Simulated Annealing --")
+        finalState = SimulatedAnnealing.main(pawnInput)
     else :
-        print ("\n-- Solusi GA --")
+        print ("\n-- Solusi Genetic Algorithm --")
         finalState = geneticalgorithm.main(pawnInput)
         
     finalState.printChessBoard()

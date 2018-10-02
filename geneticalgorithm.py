@@ -100,13 +100,11 @@ def main(pawnInput):
 # fitness function = 1 - heuristic / totalPopulationHeuristic
 
 def solve(population):
-  # sleep(3)
   totalPopulationHeuristic = 0.0
   fitness = []
   childrenPopulation = []
 
   population.sort(key=lambda individual: individual.totalHeuristic)
-
 
   for individual in population:
     totalPopulationHeuristic += individual.totalHeuristic
@@ -115,13 +113,6 @@ def solve(population):
   for individual in population:
     fitness.append(individual.totalHeuristic / totalPopulationHeuristic)
   fitness.sort(reverse=True)
-
-  # Testing
-  # print('Total Heuristik Populasi: ' + str(totalPopulationHeuristic))
-  # for individual in population:
-  #   print('individu: ' + str(individual.totalHeuristic))
-  # print(fitness)
-  # Testing
 
   for _ in range(int(ceil(POPULATION_NUMBER/2.0))):
     # choose 2 parents randomly based on the fitness function
@@ -137,13 +128,6 @@ def solve(population):
   if len(childrenPopulation) > POPULATION_NUMBER:
     childrenPopulation.pop()
 
-  # print('---')
-  # for individual in childrenPopulation:
-  #   print('-')
-  #   individual.printChessBoard()
-  #   for pawn in individual.listOfPawn:
-  #     print('{} {},{}'.format(pawn.type, pawn.x, pawn.y))
-  # print('---  ')
   return childrenPopulation
 
 def generateListOfRandomPopulation(populationNumber, pawnInput):
@@ -153,7 +137,6 @@ def generateListOfRandomPopulation(populationNumber, pawnInput):
   return population
 
 def crossOver(state1, state2):
-  # print('****************crossover*******************')
   children = []
   pawnCount = len(state1.listOfPawn)
 
@@ -168,25 +151,6 @@ def crossOver(state1, state2):
       children.append(mutate(listOfPawn2))
       return children
     pivot = (pivot - 1) % (pawnCount + 1)
-
-  #  ------------
-
-  # childrenListOfPawn1 = deepcopy(state1).listOfPawn
-  # childrenListOfPawn2 = deepcopy(state2).listOfPawn
-
-  # for i in range(len(childrenListOfPawn1)):
-  #   temp1 = childrenListOfPawn1[i]
-  #   temp2 = childrenListOfPawn2[i]
-  #   if not(isPosOccupied(temp1.x, temp1.y, childrenListOfPawn2)) and  not(isPosOccupied(temp2.x, temp2.y, childrenListOfPawn1)): # and randint(0, 1):
-  #     # print('cross pawn {} with pawn {}'.format((temp1.x, temp1.y), (temp2.x, temp2.y)))
-  #     childrenListOfPawn1[i] = temp2
-  #     childrenListOfPawn2[i] = temp1
-  #   # else:
-  #   #   print('dont cross pawn {} with pawn {}'.format((temp1.x, temp1.y), (temp2.x, temp2.y)))
-  #   #   print('parent1: {}'.format(list((o.x, o.y) for o in state1.listOfPawn)))
-  #   #   print('parent2: {}'.format(list((o.x, o.y) for o in state2.listOfPawn)))
-  
-  # return [mutate(childrenListOfPawn1), mutate(childrenListOfPawn2)]
 
 def isConflict(listOfPawn):
   for i in range(len(listOfPawn) - 1):

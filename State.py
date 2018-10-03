@@ -20,6 +20,9 @@ class State:
         self.totalCost = self.calcTotalCost()
 
     def calcNWhite(self):
+        """
+            calculate amount of white pawn in chessBoard
+        """
         nWhite = 0
         for pawn in self.listOfPawn:
             if (pawn.type.isupper()):
@@ -27,6 +30,9 @@ class State:
         return nWhite
 
     def calcNBlack(self):
+        """
+            calculate amount of black pawn in chessBoard
+        """
         nBlack = 0
         for pawn in self.listOfPawn:
             if (pawn.type.islower()):
@@ -34,17 +40,30 @@ class State:
         return nBlack
 
     def generateChessBoardByListOfPawn(self):
+        """
+            update chessboard state
+        """
         for pawn in self.listOfPawn:
             self.chessBoard[pawn.y][pawn.x] = pawn.type
 
-    # Generate Random Pawn Pada Papan Sesuai dengan Input
     def generateRandomChessBoard(self, pawnInput):
+        """
+            update chessBoard state adjust to pawn input
+            generateRandomPawn to generate new pawn
+            with random position of each pawn input
+        """
         for pawn in pawnInput:
             # nanti variabel pawn ini bentuknya dictionary gitu {'pawnType': 'xxx', 'pawnCount}: 10}
             # gunanya ** itu biar key pada variabel pawn disebar menjadi parameter fungsi generateRandomPawn
             self.generateRandomPawn(**pawn)
 
     def generateRandomPawn(self, pawnType, pawnCount):
+        """
+            generate new Pawn with random position based on
+            type of pawn and number of pawn with the type
+            new pawn defined and included into listOfPawn
+            chessBoard adjust to new pawn
+        """
         for i in range(pawnCount):
             while True:
                 x = randint(0, 7)
@@ -58,10 +77,16 @@ class State:
 
     # Print papan
     def printChessBoard(self):
-        for baris in self.chessBoard:
-            print(' '.join(baris))
+        """
+            showing the condition of chess board with pawns inside
+        """
+        for rows in self.chessBoard:
+            print(' '.join(rows))
 
     def move(self, pawn, possibleMove):
+        """
+
+        """
         self.chessBoard[pawn.y][pawn.x] = '.'
         self.chessBoard[possibleMove[1]][possibleMove[0]] = pawn.type
         pawn.move(possibleMove, self.chessBoard)
@@ -70,12 +95,18 @@ class State:
         self.totalCost = self.calcTotalCost()
 
     def calcSameColorCost(self):
+        """
+            return the same color pawn cost
+        """
         cost = 0
         for pawn in self.listOfPawn:
             cost += pawn.calcSameColorCost(self.chessBoard)
         return cost
-    
+
     def calcDiffColorCost(self):
+        """
+            return the different color pawn cost
+        """
         cost = 0
         for pawn in self.listOfPawn:
             cost += pawn.calcDiffColorCost(self.chessBoard)
@@ -85,6 +116,9 @@ class State:
         return (self.sameColorCost-self.diffColorCost+(self.nWhite*self.nBlack*2))
 
     def searchPawn(self, pawnX):
+        """
+            return the same pawn with input pawn
+        """
         for pawn in self.listOfPawn:
             if (pawn.isEqual(pawnX)):
                 return pawn

@@ -13,6 +13,9 @@ MUTATION_RATE = 0.2
 GENERATION_LIMIT = 2000
 MAX_FITNESS = 0
 
+"""
+  Prompt user to input POPULATION_NUMBER, MUTATION_RATE, AND GENERATION_LIMIT
+"""
 def inputGA():
   global POPULATION_NUMBER, MUTATION_RATE, GENERATION_LIMIT
 
@@ -76,6 +79,10 @@ def inputGA():
       stdout.flush()
       sleep(2)
 
+"""
+  Main function of Genetic Algorithm.
+  Returns best individual after certain generations
+"""
 def main(pawnInput):
   inputGA()
 
@@ -101,23 +108,13 @@ def main(pawnInput):
 
   return bestIndividual
 
-# totalPopulationCost: sum of all cost of all states in population
-# fitness function = 1 - cost / totalPopulationCost
-
+"""
+  Generate new children population from a certain population.
+  Returns children population
+"""
 def solve(population):
   childrenPopulation = []
-  # totalPopulationCost = 0.0
-  # fitness = []
-
   population.sort(key=lambda individual: individual.totalCost)
-
-  # for individual in population:
-  #   totalPopulationCost += individual.totalCost
-
-  # # calculate fitness function for each individual
-  # for individual in population:
-  #   fitness.append(individual.totalCost / totalPopulationCost)
-  # fitness.sort(reverse=True)
 
   totalFitness = 0.0
   listOfFitness = []
@@ -147,12 +144,18 @@ def solve(population):
 
   return childrenPopulation
 
+"""
+  Returns a list of random population
+"""
 def generateListOfRandomPopulation(populationNumber, pawnInput):
   population = []
   for _ in range(populationNumber):
     population.append(State(pawnInput=pawnInput))
   return population
 
+"""
+  Do cross over between 2 states
+"""
 def crossOver(state1, state2):
   children = []
   pawnCount = len(state1.listOfPawn)
@@ -169,6 +172,10 @@ def crossOver(state1, state2):
       return children
     pivot = (pivot - 1) % (pawnCount + 1)
 
+"""
+  Check if there is more than one pawn in the same spot
+  Returns boolean
+"""
 def isConflict(listOfPawn):
   for i in range(len(listOfPawn) - 1):
     j = i + 1
@@ -178,12 +185,20 @@ def isConflict(listOfPawn):
       j += 1
   return False
 
+"""
+  Check if a cell is not empty
+  Returns boolean
+"""
 def isPosOccupied(x, y, listOfPawn):
   for pawn in listOfPawn:
     if (x == pawn.x and y == pawn.y):
       return True
   return False
 
+"""
+  Mutate a state with a certain chances
+  Returns a new mutated state
+"""
 def mutate(listOfPawn):
   if random.choice([True, False], p=[MUTATION_RATE, 1-MUTATION_RATE]):
     index = random.choice(range(len(listOfPawn)))
@@ -198,8 +213,13 @@ def mutate(listOfPawn):
   else:
     return State(listOfPawn=listOfPawn)
 
+"""
+  Calculate maximum fitness that a state can have
+"""
 def countMaxFitness(state):
   global MAX_FITNESS
+  MAX_FITNESS = 0
+  
   knightPossibleMoves = 8
   queenPossibleMoves = 8
   bishopPossibleMoves = 4

@@ -5,18 +5,19 @@ def getListPossibleState(state) :
     listState = []
     tempState = deepcopy(state)
     for pawn in tempState.listOfPawn :
-        pawn.generatePossibleMoves(tempState.chessBoard)
-        for pos in pawn.listOfPossibleMove :
-            newState = deepcopy(tempState)
-            newPawn = newState.searchPawn(pawn)
-            newState.move(newPawn, pos)
-            listState.append(newState)
+        for i in range(8):
+            for j in range(8):
+                if tempState.chessBoard[j][i] == '.':
+                    newState = deepcopy(tempState)
+                    newPawn = newState.searchPawn(pawn)
+                    newState.move(newPawn, (i, j))
+                    listState.append(newState)
     return listState
 
 
-def getStateHeuristicMin(ListPossibleState) :
+def getStateCostMin(ListPossibleState) :
     stateMin = ListPossibleState[0]
     for unitState in ListPossibleState :
-        if unitState.totalHeuristic < stateMin.totalHeuristic :
+        if unitState.totalCost < stateMin.totalCost :
             stateMin = unitState
     return stateMin

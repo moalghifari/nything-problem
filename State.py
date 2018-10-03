@@ -13,9 +13,25 @@ class State:
             self.generateRandomChessBoard(pawnInput)
         if (listOfPawn and (chessBoard == constants.EMPTY_CHESS_BOARD)):
             self.generateChessBoardByListOfPawn()
-        self.sameColorHeuristic = self.calcSameColorHeuristic()
-        self.diffColorHeuristic = self.calcDiffColorHeuristic()
-        self.totalHeuristic = self.calcTotalHeuristic()
+        self.nWhite = self.calcNWhite()
+        self.nBlack = self.calcNBlack()
+        self.sameColorCost = self.calcSameColorCost()
+        self.diffColorCost = self.calcDiffColorCost()
+        self.totalCost = self.calcTotalCost()
+
+    def calcNWhite(self):
+        nWhite = 0
+        for pawn in self.listOfPawn:
+            if (pawn.type.isupper()):
+                nWhite += 1
+        return nWhite
+
+    def calcNBlack(self):
+        nBlack = 0
+        for pawn in self.listOfPawn:
+            if (pawn.type.islower()):
+                nBlack += 1
+        return nBlack
 
     def generateChessBoardByListOfPawn(self):
         for pawn in self.listOfPawn:
@@ -49,24 +65,24 @@ class State:
         self.chessBoard[pawn.y][pawn.x] = '.'
         self.chessBoard[possibleMove[1]][possibleMove[0]] = pawn.type
         pawn.move(possibleMove, self.chessBoard)
-        self.sameColorHeuristic = self.calcSameColorHeuristic()
-        self.diffColorHeuristic = self.calcDiffColorHeuristic()
-        self.totalHeuristic = self.calcTotalHeuristic()
+        self.sameColorCost = self.calcSameColorCost()
+        self.diffColorCost = self.calcDiffColorCost()
+        self.totalCost = self.calcTotalCost()
 
-    def calcSameColorHeuristic(self):
-        heuristic = 0
+    def calcSameColorCost(self):
+        cost = 0
         for pawn in self.listOfPawn:
-            heuristic += pawn.calcSameColorHeuristic(self.chessBoard)
-        return heuristic
+            cost += pawn.calcSameColorCost(self.chessBoard)
+        return cost
     
-    def calcDiffColorHeuristic(self):
-        heuristic = 0
+    def calcDiffColorCost(self):
+        cost = 0
         for pawn in self.listOfPawn:
-            heuristic += pawn.calcDiffColorHeuristic(self.chessBoard)
-        return heuristic
+            cost += pawn.calcDiffColorCost(self.chessBoard)
+        return cost
 
-    def calcTotalHeuristic(self):
-        return (self.calcSameColorHeuristic())
+    def calcTotalCost(self):
+        return (self.sameColorCost-self.diffColorCost+(self.nWhite*self.nBlack*2))
 
     def searchPawn(self, pawnX):
         for pawn in self.listOfPawn:

@@ -84,58 +84,58 @@ class Pawn:
                 PossibleMove.append([self.x+i, self.y-i])
         return PossibleMove
 
-    def checkHorizontalHeuristic(self, pawn_color, Board) :
+    def checkHorizontalCost(self, pawn_color, Board) :
         """
-            return heuristic of pawn by checking from horizontal and vertical side
+            return cost of pawn by checking from horizontal and vertical side
             use for Rook and Queen
         """
-        heuristic = 0
+        cost = 0
         # horizontal check
         for n in range(1,8) :
             if (not(self.outChessBoard(self.x+n, self.y)) and Board[self.y][self.x+n] in pawn_color) :
-                heuristic += 1
+                cost += 1
                 break
         for n in range(1,8) :
             if (not(self.outChessBoard(self.x-n, self.y)) and Board[self.y][self.x-n] in pawn_color) :
-                heuristic += 1
+                cost += 1
                 break
         # vertical check
         for n in range(1,8) :
             if (not(self.outChessBoard(self.x, self.y-n)) and Board[self.y-n][self.x] in pawn_color) :
-                heuristic += 1
+                cost += 1
                 break
         for n in range(1,8) :
             if (not(self.outChessBoard(self.x, self.y+n)) and Board[self.y+n][self.x] in pawn_color) :
-                heuristic += 1
+                cost += 1
                 break
-        return heuristic
-    def checkDiagonalHeuristic(self, pawn_color, Board) :
+        return cost
+    def checkDiagonalCost(self, pawn_color, Board) :
         """
-            return heuristic of pawn by checking from diagonal side
+            return cost of pawn by checking from diagonal side
             use for Bishop and Queen
         """
-        heuristic = 0
+        cost = 0
         # diagonal down right check
         for n in range(1,8) :
             if (not(self.outChessBoard(self.x+n, self.y+n)) and Board[self.y+n][self.x+n] in pawn_color) :
-                heuristic += 1
+                cost += 1
                 break
         # diagonal up left check
         for n in range(1,8) :
             if (not(self.outChessBoard(self.x-n, self.y-n)) and Board[self.y-n][self.x-n] in pawn_color) :
-                heuristic += 1
+                cost += 1
                 break
         # diagonal down left check
         for n in range(1,8) :
             if (not(self.outChessBoard(self.x-n, self.y+n)) and Board[self.y+n][self.x-n] in pawn_color) :
-                heuristic += 1
+                cost += 1
                 break
         # diagonal up right check
         for n in range(1,8) :
             if (not(self.outChessBoard(self.x+n, self.y-n)) and Board[self.y-n][self.x+n] in pawn_color) :
-                heuristic += 1
+                cost += 1
                 break
-        return heuristic
+        return cost
 
     def generatePossibleMoves(self, chessBoard) :
         """
@@ -159,40 +159,40 @@ class Pawn:
         elif (self.type == 'B' or self.type == 'b') :
             self.listOfPossibleMove = self.checkDiagonal(chessBoard)
 
-    def calcHeuristic(self, chessBoard, pawn_color) :
+    def calcCost(self, chessBoard, pawn_color) :
         """
-            return heuristic of pawn based on the type
-            heuristic is the number of pawn that can be attacked by itself
+            return cost of pawn based on the type
+            cost is the number of pawn that can be attacked by itself
         """
-        heuristic = 0
+        cost = 0
         if (self.type == 'K' or self.type == 'k') :
             if (not(self.outChessBoard(self.x+1, self.y-2)) and chessBoard[self.y-2][self.x+1] in pawn_color) :
-                heuristic += 1
+                cost += 1
             if (not(self.outChessBoard(self.x+2, self.y-1)) and chessBoard[self.y-1][self.x+2] in pawn_color) :
-                heuristic += 1
+                cost += 1
             if (not(self.outChessBoard(self.x+2, self.y+1)) and chessBoard[self.y+1][self.x+2] in pawn_color) :
-                heuristic += 1
+                cost += 1
             if (not(self.outChessBoard(self.x+1, self.y+2)) and chessBoard[self.y+2][self.x+1] in pawn_color) :
-                heuristic += 1
+                cost += 1
             if (not(self.outChessBoard(self.x-1, self.y+2)) and chessBoard[self.y+2][self.x-1] in pawn_color) :
-                heuristic += 1
+                cost += 1
             if (not(self.outChessBoard(self.x-2, self.y+1)) and chessBoard[self.y+1][self.x-2] in pawn_color) :
-                heuristic += 1
+                cost += 1
             if (not(self.outChessBoard(self.x-2, self.y-1)) and chessBoard[self.y-1][self.x-2] in pawn_color) :
-                heuristic += 1
+                cost += 1
             if (not(self.outChessBoard(self.x-1, self.y-2)) and chessBoard[self.y-2][self.x-1] in pawn_color) :
-                heuristic += 1
+                cost += 1
         elif (self.type == 'R' or self.type == 'r') :
-            heuristic = self.checkHorizontalHeuristic(pawn_color, chessBoard)
+            cost = self.checkHorizontalCost(pawn_color, chessBoard)
         elif (self.type == 'B' or self.type == 'b') :
-            heuristic = self.checkDiagonalHeuristic(pawn_color, chessBoard)
+            cost = self.checkDiagonalCost(pawn_color, chessBoard)
         elif (self.type == 'Q' or self.type == 'q') :
-            heuristic = heuristic + self.checkHorizontalHeuristic(pawn_color, chessBoard) + self.checkDiagonalHeuristic(pawn_color, chessBoard)
-        return heuristic
+            cost = cost + self.checkHorizontalCost(pawn_color, chessBoard) + self.checkDiagonalCost(pawn_color, chessBoard)
+        return cost
 
-    def calcSameColorHeuristic(self, chessBoard) :
+    def calcSameColorCost(self, chessBoard) :
         """
-            return the same color pawn heuristic
+            return the same color pawn cost
             if black pawn then search for black pawn
             if white pawn then search for white pawn
         """
@@ -200,11 +200,11 @@ class Pawn:
             pawn_color = WHITE_PAWN
         else :
             pawn_color = BLACK_PAWN
-        return self.calcHeuristic(chessBoard, pawn_color)
+        return self.calcCost(chessBoard, pawn_color)
 
-    def calcDiffColorHeuristic(self, chessBoard) :
+    def calcDiffColorCost(self, chessBoard) :
         """
-            return the different color pawn heuristic
+            return the different color pawn cost
             if black pawn then search for white pawn
             if white pawn then search for black pawn
         """
@@ -212,7 +212,7 @@ class Pawn:
             pawn_color = BLACK_PAWN
         else :
             pawn_color = WHITE_PAWN
-        return self.calcHeuristic(chessBoard, pawn_color)
+        return self.calcCost(chessBoard, pawn_color)
 
     def move(self, currentPosition, chessBoard):
         """

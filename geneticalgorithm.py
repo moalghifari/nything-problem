@@ -11,6 +11,7 @@ from InvalidInputError import InvalidInputError
 POPULATION_NUMBER = 10
 MUTATION_RATE = 0.2
 GENERATION_LIMIT = 2000
+MAX_FITNESS = 0
 
 def inputGA():
   global POPULATION_NUMBER, MUTATION_RATE, GENERATION_LIMIT
@@ -80,45 +81,61 @@ def main(pawnInput):
 
   population = generateListOfRandomPopulation(POPULATION_NUMBER, pawnInput)
   generation = 0
-  bestIndividual = None
+  bestIndividual = population[0]
+  countMaxFitness(bestIndividual)
 
-  while generation <= GENERATION_LIMIT:
-    stdout.write('\rGeneration: {}'.format(generation))
-    population = solve(population)
-    if (bestIndividual == None or bestIndividual.totalHeuristic > population[0].totalHeuristic):
-      bestIndividual = population[0]
-    generation += 1
-    if (population[0].totalHeuristic == 0):
-      break
+  try:
+    while generation <= GENERATION_LIMIT:
+      stdout.write('\rGeneration: {} | Cost terbaik: {} {}'.format(generation, bestIndividual.sameColorCost, bestIndividual.diffColorCost))
+      population = solve(population)
+      if (bestIndividual == None or bestIndividual.totalCost > population[0].totalCost):
+        bestIndividual = population[0]
+      generation += 1
+      if (population[0].totalCost == 0):
+        break
+  except KeyboardInterrupt:
+    print('\nstopped via keyboard')
   
   print('\nPopulasi: {}'.format(POPULATION_NUMBER))
   print('Mutation Rate: {}'.format(MUTATION_RATE))
 
   return bestIndividual
 
-# totalPopulationHeuristic: sum of all heuristic of all states in population
-# fitness function = 1 - heuristic / totalPopulationHeuristic
+# totalPopulationCost: sum of all cost of all states in population
+# fitness function = 1 - cost / totalPopulationCost
 
 def solve(population):
-  totalPopulationHeuristic = 0.0
-  fitness = []
   childrenPopulation = []
+  # totalPopulationCost = 0.0
+  # fitness = []
 
-  population.sort(key=lambda individual: individual.totalHeuristic)
+  population.sort(key=lambda individual: individual.totalCost)
+
+  # for individual in population:
+  #   totalPopulationCost += individual.totalCost
+
+  # # calculate fitness function for each individual
+  # for individual in population:
+  #   fitness.append(individual.totalCost / totalPopulationCost)
+  # fitness.sort(reverse=True)
+
+  totalFitness = 0.0
+  listOfFitness = []
+  fitnessFunction = []
 
   for individual in population:
-    totalPopulationHeuristic += individual.totalHeuristic
-
-  # calculate fitness function for each individual
-  for individual in population:
-    fitness.append(individual.totalHeuristic / totalPopulationHeuristic)
-  fitness.sort(reverse=True)
+    fitness = MAX_FITNESS - individual.totalCost
+    totalFitness += fitness
+    listOfFitness.append(fitness)
+  
+  for fitness in listOfFitness:
+    fitnessFunction.append(fitness / totalFitness)
 
   for _ in range(int(ceil(POPULATION_NUMBER/2.0))):
     # choose 2 parents randomly based on the fitness function
-    parentIndex1 = random.choice(range(POPULATION_NUMBER), p=fitness)
+    parentIndex1 = random.choice(range(POPULATION_NUMBER), p=fitnessFunction)
     while True:
-      parentIndex2 = random.choice(range(POPULATION_NUMBER), p=fitness)
+      parentIndex2 = random.choice(range(POPULATION_NUMBER), p=fitnessFunction)
       if parentIndex2 != parentIndex1:
         break
     # crossover those 2 parents, concate the children to childrenPopulation
@@ -180,3 +197,19 @@ def mutate(listOfPawn):
     return State(listOfPawn=listOfPawn)
   else:
     return State(listOfPawn=listOfPawn)
+
+def countMaxFitness(state):
+  global MAX_FITNESS
+  knightPossibleMoves = 8
+  queenPossibleMoves = 8
+  bishopPossibleMoves = 4
+  rookPossibleMoves = 4
+  for pawn in state.listOfPawn:
+    if pawn.type == 'k' or pawn.type == 'K':
+      MAX_FITNESS += knightPossibleMoves
+    elif pawn.type == 'r' or pawn.type == 'R':
+      MAX_FITNESS += rookPossibleMoves
+    elif pawn.type == 'q' or pawn.type == 'Q':
+      MAX_FITNESS += queenPossibleMoves
+    elif pawn.type == 'b' or pawn.type == 'B':
+      MAX_FITNESS += bishopPossibleMoves

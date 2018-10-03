@@ -36,14 +36,14 @@ def main() :
     print("▄ ▀ ░ ▄ ▀ ░     ▀░░▀ ░ ░ ▄▄▄█ ░░▀░░ ▀░░▀ ▀▀▀ ▀░░▀ ▀▀▀▀     ░ ▀ ▄ ░ ▀ ▄\n")
     fname = input("Masukan Nama File Input Bidak Catur : ")
     pawnInput = input_pawn(fname)
-    print(" *•.¸*•.¸¤ Pilih Algoritma local search yang digunakan ¤¸.•*¸.•* "),
-    print(">> 1. Hill Climbing")
-    print(">> 2. Simulated Annealing")
-    print(">> 3. Genetic Algorithm\n")
-    str = input(">> Pilihan : ")
+    print("Pilih Algoritma local search yang digunakan"),
+    print("1. Hill Climbing")
+    print("2. Simulated Annealing")
+    print("3. Genetic Algorithm\n")
+    str = input(">> Pilihan: ")
     while(not(int(str)==1 or int(str)==2 or int(str)==3)):
-        print(">> Masukan Salah !")
-        str = input(">> Pilihan : ")
+        print("Masukan Salah !")
+        str = input(">> Pilihan: ")
     if (int(str) == 1) :
         print ("\n-- Solusi Hill Climbing --")
         finalState = hillClimbing.main(pawnInput)
@@ -53,8 +53,8 @@ def main() :
     else :
         print ("\n-- Solusi Genetic Algorithm --")
         finalState = geneticalgorithm.main(pawnInput)
-        
+    print('\n')
     finalState.printChessBoard()
-    print(finalState.sameColorHeuristic, finalState.diffColorHeuristic)
+    print(finalState.sameColorCost, finalState.diffColorCost)
 if __name__ == '__main__' :
     main()
